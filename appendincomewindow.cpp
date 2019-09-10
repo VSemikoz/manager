@@ -1,6 +1,5 @@
 #include "appendincomewindow.h"
 #include "ui_appendincomewindow.h"
-#include <QStringList>
 
 AppendIncomeWindow::AppendIncomeWindow(QWidget *parent) :
     QDialog(parent),

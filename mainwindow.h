@@ -2,11 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSqlDatabase>
+#include <QSqlQuery>
 #include <QSqlTableModel>
+#include <QSqlQueryModel>
 
 #include "database.h"
 #include "appendincomewindow.h"
 #include "appendspendingwindow.h"
+#include <QtDebug>
 
 namespace Ui {
 class MainWindow;
@@ -21,8 +25,9 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
+    void showDataOnTables();
 
+    void on_pushButton_clicked();
     void on_pushButton_2_clicked();
 
 private:

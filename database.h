@@ -9,15 +9,10 @@
 #include <QFile>
 #include <QDate>
 #include <QDebug>
-
-#define DATABASE_HOSTNAME   "ExampleDataBase"
-#define DATABASE_NAME       "DataBase.db"
-
-#define TABLE                   "TableExample"
-#define TABLE_DATE              "Date"
-#define TABLE_TIME              "Time"
-#define TABLE_MESSAGE           "Message"
-#define TABLE_RANDOM            "Random"
+#include <QSqlTableModel>
+#include "QtSql"
+#include <QSqlQuery>
+#include <QApplication>
 
 class DataBase : public QObject
 {
@@ -27,7 +22,11 @@ public:
     ~DataBase();
 
     void connectToDataBase();
+    void closeDataBase();
     bool inserIntoTable(const QVariantList &data);
+
+    QSqlQuery getDataFromIncomeTable();
+    QSqlQuery getDataFromSpendingTable();
 
 private:
     QSqlDatabase    db;
@@ -35,8 +34,7 @@ private:
 private:
     bool openDataBase();
     bool restoreDataBase();
-    void closeDataBase();
-    bool createTable();
+    bool createTables();
 };
 
 #endif

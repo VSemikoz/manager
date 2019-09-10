@@ -1,6 +1,5 @@
 #include "appendspendingwindow.h"
 #include "ui_appendspendingwindow.h"
-#include <QStringList>
 
 AppendSpendingWindow::AppendSpendingWindow(QWidget *parent) :
     QDialog(parent),

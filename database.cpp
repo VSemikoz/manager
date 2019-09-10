@@ -1,6 +1,4 @@
 #include "database.h"
-#include <QDebug>
-#include <QSqlError>
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -14,17 +12,20 @@ DataBase::~DataBase()
 
 void DataBase::connectToDataBase()
 {
-    if(!QFile("D:\QTprojects\manager" DATABASE_NAME).exists()){
-        this->restoreDataBase();
-    } else {
-        this->openDataBase();
+    if(!QFile("D:/QTprojects/manager/managerdatabase.db").exists()){
+         this->restoreDataBase();
+         qDebug() << "connection deny";
+    }else{
+         this->openDataBase();
+          qDebug() << "connection success";
     }
+
 }
 
 bool DataBase::restoreDataBase()
 {
     if(this->openDataBase()){
-        if(!this->createTable()){
+        if(!this->createTables()){
             return false;
         } else {
             return true;
@@ -33,18 +34,19 @@ bool DataBase::restoreDataBase()
         qDebug() << "Не удалось восстановить базу данных";
         return false;
     }
-    return false;
 }
-
 bool DataBase::openDataBase()
 {
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setHostName(DATABASE_HOSTNAME);
-    db.setDatabaseName("D:\QTprojects\DataBase" DATABASE_NAME);
-    if(db.open()){
-        return true;
-    } else {
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("D:/QTprojects/manager/managerdatabase.db");
+    if (!db.open())
+    {
+        qDebug() << db.lastError().text();
         return false;
+    }
+    else
+    {
+        return true;
     }
 }
 
@@ -54,46 +56,43 @@ void DataBase::closeDataBase()
 }
 
 
-bool DataBase::createTable()
+bool DataBase::createTables()
 {
 
     QSqlQuery query;
-    if(!query.exec( "CREATE TABLE " TABLE " ("
-                            "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                            TABLE_DATE      " DATE            NOT NULL,"
-                            TABLE_TIME      " TIME            NOT NULL,"
-                            TABLE_RANDOM    " INTEGER         NOT NULL,"
-                            TABLE_MESSAGE   " VARCHAR(255)    NOT NULL"
-                        " )"
-                    )){
-        qDebug() << "DataBase: error of create " << TABLE;
+    if(!query.exec( "CREATE TABLE  income_table  ("
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
+                    "income INTEGER DEFAULT (0) NOT NULL,"
+                    " category VARCHAR NOT NULL DEFAULT ('other'),"
+                    "  date DATE DEFAULT ( (CURRENT_TIMESTAMP) ) NOT NULL)"
+                    ) and
+    !query.exec("CREATE TABLE spending_table ("
+                "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
+                "spending INTEGER DEFAULT (0) NOT NULL, "
+                "category VARCHAR NOT NULL DEFAULT ('other'),"
+                " date DATE DEFAULT ( (CURRENT_TIMESTAMP) )  NOT NULL "))
+
+    {
+        qDebug() << "DataBase: error of create Tables";
         qDebug() << query.lastError().text();
         return false;
     } else {
         return true;
     }
-    return false;
 }
 
-bool DataBase::inserIntoTable(const QVariantList &data)
+QSqlQuery DataBase::getDataFromIncomeTable()
 {
-
     QSqlQuery query;
-    query.prepare("INSERT INTO " TABLE " ( " TABLE_DATE ", "
-                                             TABLE_TIME ", "
-                                             TABLE_RANDOM ", "
-                                             TABLE_MESSAGE " ) "
-                  "VALUES (:Date, :Time, :Random, :Message )");
-    query.bindValue(":Date",        data[0].toDate());
-    query.bindValue(":Time",        data[1].toTime());
-    query.bindValue(":Random",      data[2].toInt());
-    query.bindValue(":Message",     data[3].toString());
-    if(!query.exec()){
-        qDebug() << "error insert into " << TABLE;
-        qDebug() << query.lastError().text();
-        return false;
-    } else {
-        return true;
-    }
-    return false;
+    query.exec("SELECT * FROM income_table");
+    return query;
 }
+
+QSqlQuery DataBase::getDataFromSpendingTable()
+{
+    QSqlQuery query;
+    query.exec("SELECT * FROM spending_table");
+    return query;
+}
+
+

@@ -2,6 +2,7 @@
 #define APPENDSPENDINGWINDOW_H
 
 #include <QDialog>
+#include <QStringList>
 
 namespace Ui {
 class AppendSpendingWindow;

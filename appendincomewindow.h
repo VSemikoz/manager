@@ -2,6 +2,8 @@
 #define APPENDINCOMEWINDOW_H
 
 #include <QDialog>
+#include <QStringList>
+
 
 namespace Ui {
 class AppendIncomeWindow;
