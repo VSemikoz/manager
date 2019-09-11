@@ -13,6 +13,7 @@
 #include "QtSql"
 #include <QSqlQuery>
 #include <QApplication>
+#include <QString>
 
 class DataBase : public QObject
 {
@@ -23,18 +24,30 @@ public:
 
     void connectToDataBase();
     void closeDataBase();
-    bool inserIntoTable(const QVariantList &data);
+    //bool inserIntoTable(const QVariantList &data);
+    bool insertIntoIncomeTable(QString income, QString category, QDate date);
+    bool insertIntoSpendingTable(QString spending, QString category, QDate date);
 
     QSqlQuery getDataFromIncomeTable();
     QSqlQuery getDataFromSpendingTable();
 
 private:
     QSqlDatabase    db;
+    QString createIncomeTableQuery = "CREATE TABLE  income_table  ("
+                                     "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
+                                     "income INTEGER DEFAULT (0) NOT NULL,"
+                                     " category VARCHAR NOT NULL DEFAULT ('other'),"
+                                     "  date DATE DEFAULT ( (CURRENT_TIMESTAMP) ) NOT NULL)";
 
-private:
+    QString createSpendingTableQuery = "CREATE TABLE spending_table ("
+                                       "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
+                                       "spending INTEGER DEFAULT (0) NOT NULL, "
+                                       "category VARCHAR NOT NULL DEFAULT ('other'),"
+                                       " date DATE DEFAULT ( (CURRENT_TIMESTAMP) )  NOT NULL ";
     bool openDataBase();
     bool restoreDataBase();
     bool createTables();
+
 };
 
 #endif

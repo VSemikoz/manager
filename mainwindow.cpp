@@ -3,22 +3,21 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+    ui(new Ui::MainWindow){
+
     ui->setupUi(this);
+    db = new DataBase();
     db->connectToDataBase();
     showDataOnTables();
-
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow(){
     db->closeDataBase();
     delete ui;
+
 }
 
-void MainWindow::showDataOnTables()
-{
+void MainWindow::showDataOnTables(){
     QSqlQuery dataFromIncomeTable = db->getDataFromIncomeTable();
     QSqlQueryModel *incomeModel = new QSqlQueryModel();
     incomeModel->setQuery(dataFromIncomeTable);
@@ -31,7 +30,7 @@ void MainWindow::showDataOnTables()
 }
 void MainWindow::on_pushButton_clicked()
 {
-    appendIncomeWindow = new AppendIncomeWindow(this);
+    appendIncomeWindow = new AppendIncomeWindow(db, this);
     appendIncomeWindow->setModal(true);
     appendIncomeWindow->exec();
 }
