@@ -6,6 +6,7 @@
 #include <QDialog>
 #include <QStringList>
 #include <QDebug>
+#include <QDataWidgetMapper>
 
 
 namespace Ui {
@@ -30,6 +31,10 @@ private slots:
 private:
     Ui::AppendIncomeWindow *ui;
     DataBase *DataBaseConnection;
+    QSqlTableModel  *model;
+    QDataWidgetMapper *mapper;
+
+    void setupModel();
 
 };
 

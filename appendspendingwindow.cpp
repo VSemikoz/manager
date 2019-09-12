@@ -8,8 +8,16 @@
 AppendSpendingWindow::AppendSpendingWindow(DataBase *db, int row, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AppendSpendingWindow){
-    ui->setupUi(this);
     DataBaseConnection = db;
+    ui->setupUi(this);
+    setupModel();
+    if (row == -1){
+        model->insertRow(model->rowCount(QModelIndex()));
+        mapper->toLast();
+    } else {
+        qDebug()<<model->index(row,0);
+        mapper->setCurrentModelIndex(model->index(row,0));
+    }
 
     QStringList incomeCategoryList = {"Home", "Work", "Market", "Other"};
 
@@ -22,23 +30,31 @@ AppendSpendingWindow::AppendSpendingWindow(DataBase *db, int row, QWidget *paren
     ui->lineEdit->setValidator(incomeValidator);
 }
 
+
+void AppendSpendingWindow::setupModel(){
+    model = new QSqlTableModel(this);
+    model->setTable("spending_table");
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->select();
+
+    mapper = new QDataWidgetMapper();
+    mapper->setModel(model);
+    mapper->addMapping(ui->lineEdit, 1);
+    mapper->addMapping(ui->comboBox, 2);
+    mapper->addMapping(ui->dateEdit, 3);
+
+    mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+}
+
 AppendSpendingWindow::~AppendSpendingWindow(){
     delete ui;
 }
 
 void AppendSpendingWindow::on_buttonBox_2_accepted(){
-    QString spending = ui->lineEdit->text();
-    QString category = ui->comboBox->currentText();
-    QDate curDate = ui->dateEdit->date();
-    qDebug()<< spending << category << curDate;
-
-    if (spending.isEmpty()){
-        qDebug()<<"spending is empty";
-    } else {
-        DataBaseConnection->insertIntoSpendingTable(spending, category, curDate);
-        emit signalSpendingUpdate();
-        this->~AppendSpendingWindow();
-    }
+    mapper->submit();
+    model->submitAll();
+    emit signalSpendingUpdate();
+    this->close();
 }
 
 void AppendSpendingWindow::on_buttonBox_2_rejected(){

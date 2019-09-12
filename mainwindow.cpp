@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -62,7 +63,7 @@ void MainWindow::setupSpendingModel(const QString &tableName, const QStringList 
 void MainWindow::slotIncomeMenuRequested(QPoint pos){
     QMenu * menu = new QMenu(this);
     QAction * deleteDevice = new QAction(trUtf8("Удалить"), this);
-    connect(deleteDevice, SIGNAL(triggered()), this, SLOT(slotRemoveIncomeRecord()));
+    connect(deleteDevice, SIGNAL(triggered()), this, SLOT(slotRemoveRecordFromIncome()));
     menu->addAction(deleteDevice);
     menu->popup(ui->tableView->viewport()->mapToGlobal(pos));
 }
@@ -70,9 +71,53 @@ void MainWindow::slotIncomeMenuRequested(QPoint pos){
 void MainWindow::slotSpendingMenuRequested(QPoint pos){
     QMenu * menu = new QMenu(this);
     QAction * deleteDevice = new QAction(trUtf8("Удалить"), this);
-    connect(deleteDevice, SIGNAL(triggered()), this, SLOT(slotRemoveSpendingRecord()));
+    connect(deleteDevice, SIGNAL(triggered()), this, SLOT(slotRemoveRecordFromSpending()));
     menu->addAction(deleteDevice);
     menu->popup(ui->tableView_2->viewport()->mapToGlobal(pos));
+}
+
+void MainWindow::slotRemoveRecordFromIncome(){
+    int row = ui->tableView->selectionModel()->currentIndex().row();
+     if(row >= 0){
+        if (QMessageBox::warning(this,
+                              trUtf8("Удаление записи"),
+                              trUtf8("Вы уверены, что хотите удалить эту запись?"),
+                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::No){
+                QSqlDatabase::database().rollback();
+                return;
+                } else {
+                    if(!incomeModel->removeRow(row)){
+                        QMessageBox::warning(this,trUtf8("Уведомление"),
+                        trUtf8("Не удалось удалить запись\n"
+                        "Возможно она используется другими таблицами\n"
+                        "Проверьте все зависимости и повторите попытку"));
+                    }
+                        incomeModel->select();
+                        ui->tableView->setCurrentIndex(incomeModel->index(-1, -1));
+         }
+     }
+}
+
+void MainWindow::slotRemoveRecordFromSpending(){
+    int row = ui->tableView_2->selectionModel()->currentIndex().row();
+     if(row >= 0){
+        if (QMessageBox::warning(this,
+                              trUtf8("Удаление записи"),
+                              trUtf8("Вы уверены, что хотите удалить эту запись?"),
+                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::No){
+                QSqlDatabase::database().rollback();
+                return;
+                } else {
+                    if(!spendingModel->removeRow(row)){
+                        QMessageBox::warning(this,trUtf8("Уведомление"),
+                        trUtf8("Не удалось удалить запись\n"
+                        "Возможно она используется другими таблицами\n"
+                        "Проверьте все зависимости и повторите попытку"));
+                    }
+                        spendingModel->select();
+                        ui->tableView_2->setCurrentIndex(spendingModel->index(-1, -1));
+         }
+     }
 }
 void MainWindow::on_pushButton_clicked(){
 

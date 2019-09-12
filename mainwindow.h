@@ -42,6 +42,9 @@ private slots:
     void slotIncomeMenuRequested(QPoint pos);
     void slotSpendingMenuRequested(QPoint pos);
 
+    void slotRemoveRecordFromIncome();
+    void slotRemoveRecordFromSpending();
+
 private:
     Ui::MainWindow  *ui;
     QSqlTableModel  *model;

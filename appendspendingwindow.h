@@ -6,6 +6,7 @@
 #include <QDialog>
 #include <QStringList>
 #include <QDebug>
+#include <QDataWidgetMapper>
 
 namespace Ui {
 class AppendSpendingWindow;
@@ -29,6 +30,10 @@ private slots:
 private:
     Ui::AppendSpendingWindow *ui;
     DataBase *DataBaseConnection;
+    QSqlTableModel  *model;
+    QDataWidgetMapper *mapper;
+
+    void setupModel();
 
 };
 

@@ -10,6 +10,14 @@ AppendIncomeWindow::AppendIncomeWindow( DataBase *db, int row, QWidget *parent) 
     ui(new Ui::AppendIncomeWindow){
     DataBaseConnection = db;
     ui->setupUi(this);
+    setupModel();
+    if (row == -1){
+        model->insertRow(model->rowCount(QModelIndex()));
+        mapper->toLast();
+    } else {
+        qDebug()<<model->index(row,0);
+        mapper->setCurrentModelIndex(model->index(row,0));
+    }
 
     QStringList incomeCategoryList = {"Home", "Work", "Market", "Other"};
 
@@ -20,25 +28,31 @@ AppendIncomeWindow::AppendIncomeWindow( DataBase *db, int row, QWidget *parent) 
     QRegExp onlyDigitalsRegExp(onlyDigitalsRegExpString);
     QRegExpValidator *incomeValidator = new QRegExpValidator(onlyDigitalsRegExp, this);
     ui->lineEdit_2->setValidator(incomeValidator);
-
 }
 
+void AppendIncomeWindow::setupModel(){
+    model = new QSqlTableModel(this);
+    model->setTable("income_table");
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->select();
+
+    mapper = new QDataWidgetMapper();
+    mapper->setModel(model);
+    mapper->addMapping(ui->lineEdit_2, 1);
+    mapper->addMapping(ui->comboBox_2, 2);
+    mapper->addMapping(ui->dateEdit_2, 3);
+
+    mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+}
 AppendIncomeWindow::~AppendIncomeWindow(){
     delete ui;
 }
 
 void AppendIncomeWindow::on_buttonBox_2_accepted(){
-    QString income = ui->lineEdit_2->text();
-    QString category = ui->comboBox_2->currentText();
-    QDate curDate = ui->dateEdit_2->date();
-    qDebug()<< income << category << curDate;
-    if (income.isEmpty()){
-        qDebug()<<"income is empty";
-    } else {
-        DataBaseConnection->insertIntoIncomeTable(income, category, curDate);
-        emit signalIncomeUpdate();
-        this->~AppendIncomeWindow();
-    }
+    mapper->submit();
+    model->submitAll();
+    emit signalIncomeUpdate();
+    this->close();
 }
 
 void AppendIncomeWindow::on_buttonBox_2_rejected(){

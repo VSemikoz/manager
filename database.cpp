@@ -102,32 +102,6 @@ bool DataBase::insertIntoSpendingTable(QString spending, QString category, QDate
     }
 }
 
-bool DataBase::deleteFromIncomeTableById(const int id){
-    QSqlQuery query;
-
-    query.prepare("DELETE FROM income_table WHERE ID= :ID ;");
-    query.bindValue(":ID", id);
-
-    if (!query.exec()){
-        return false;
-    } else {
-        return true;
-    }
-}
-
-bool DataBase::deleteFromSpendingTableById(const int id){
-    QSqlQuery query;
-
-    query.prepare("DELETE FROM spending_table WHERE ID= :ID ;");
-    query.bindValue(":ID", id);
-
-    if (!query.exec()){
-        return false;
-    } else {
-        return true;
-    }
-}
-
 bool DataBase::updateInIncomeTableById(const int id, QString income, QString category, QDate date){
     QSqlQuery query;
     query.prepare("UPDATE spending_table SET"
