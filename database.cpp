@@ -1,17 +1,14 @@
 #include "database.h"
 
-DataBase::DataBase(QObject *parent) : QObject(parent)
-{
+DataBase::DataBase(QObject *parent) : QObject(parent){
 
 }
 
-DataBase::~DataBase()
-{
+DataBase::~DataBase(){
 
 }
 
-void DataBase::connectToDataBase()
-{
+void DataBase::connectToDataBase(){
     if(!QFile("D:/QTprojects/manager/managerdatabase.db").exists()){
          this->restoreDataBase();
          qDebug() << "connection deny";
@@ -22,8 +19,7 @@ void DataBase::connectToDataBase()
 
 }
 
-bool DataBase::restoreDataBase()
-{
+bool DataBase::restoreDataBase(){
     if(this->openDataBase()){
         if(!this->createTables()){
             return false;
@@ -35,8 +31,7 @@ bool DataBase::restoreDataBase()
         return false;
     }
 }
-bool DataBase::openDataBase()
-{
+bool DataBase::openDataBase(){
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("D:/QTprojects/manager/managerdatabase.db");
     if (!db.open()){
@@ -107,8 +102,68 @@ bool DataBase::insertIntoSpendingTable(QString spending, QString category, QDate
     }
 }
 
-bool DataBase::deleteFromIncomeTableById(int id){
+bool DataBase::deleteFromIncomeTableById(const int id){
     QSqlQuery query;
+
+    query.prepare("DELETE FROM income_table WHERE ID= :ID ;");
+    query.bindValue(":ID", id);
+
+    if (!query.exec()){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+bool DataBase::deleteFromSpendingTableById(const int id){
+    QSqlQuery query;
+
+    query.prepare("DELETE FROM spending_table WHERE ID= :ID ;");
+    query.bindValue(":ID", id);
+
+    if (!query.exec()){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+bool DataBase::updateInIncomeTableById(const int id, QString income, QString category, QDate date){
+    QSqlQuery query;
+    query.prepare("UPDATE spending_table SET"
+                    "ID=:ID"
+                    "income=:income"
+                    "category=:category"
+                    "date=:date"
+                    "WHERE ID =:ID");
+
+    query.bindValue(":ID", id);
+    query.bindValue(":income", income);
+    query.bindValue(":category", category);
+    query.bindValue(":ID", id);
+    query.bindValue(":date", date);
+
+    if (!query.exec()){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+bool DataBase::updateInSpendingTableById(const int id, QString income, QString category, QDate date){
+    QSqlQuery query;
+    query.prepare("UPDATE income_table SET"
+                    "ID=:ID"
+                    "income=:income"
+                    "category=:category"
+                    "date=:date"
+                    "WHERE ID =:ID");
+
+    query.bindValue(":ID", id);
+    query.bindValue(":income", income);
+    query.bindValue(":category", category);
+    query.bindValue(":ID", id);
+    query.bindValue(":date", date);
 
     if (!query.exec()){
         return false;

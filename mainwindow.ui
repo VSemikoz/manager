@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Добавить доходы</string>
+     <string>Добавить расходы</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
@@ -37,7 +37,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Добавить расходы</string>
+     <string>Добавить доход</string>
     </property>
    </widget>
    <widget class="QTableView" name="tableView_2">

@@ -24,9 +24,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void showDataOnTables();
     void updateDataOnTables();
-
     DataBase        *db;
 
 
@@ -35,7 +33,14 @@ private slots:
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
     void on_pushButton_3_clicked();
+    void slotIncomeUpdateModels();
+    void slotSpendingUpdateModels();
 
+    void slotEditIncomeRecord(QModelIndex index);
+    void slotEditSpendingRecord(QModelIndex index);
+
+    void slotIncomeMenuRequested(QPoint pos);
+    void slotSpendingMenuRequested(QPoint pos);
 
 private:
     Ui::MainWindow  *ui;

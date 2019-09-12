@@ -5,10 +5,9 @@
 #include <QWidget>
 #include <QSqlDatabase>
 
-AppendIncomeWindow::AppendIncomeWindow(DataBase *db, QWidget *parent) :
+AppendIncomeWindow::AppendIncomeWindow( DataBase *db, int row, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AppendIncomeWindow)
-{
+    ui(new Ui::AppendIncomeWindow){
     DataBaseConnection = db;
     ui->setupUi(this);
 
@@ -24,8 +23,7 @@ AppendIncomeWindow::AppendIncomeWindow(DataBase *db, QWidget *parent) :
 
 }
 
-AppendIncomeWindow::~AppendIncomeWindow()
-{
+AppendIncomeWindow::~AppendIncomeWindow(){
     delete ui;
 }
 
@@ -37,7 +35,8 @@ void AppendIncomeWindow::on_buttonBox_2_accepted(){
     if (income.isEmpty()){
         qDebug()<<"income is empty";
     } else {
-        qDebug()<<DataBaseConnection->insertIntoIncomeTable(income, category, curDate);
+        DataBaseConnection->insertIntoIncomeTable(income, category, curDate);
+        emit signalIncomeUpdate();
         this->~AppendIncomeWindow();
     }
 }
