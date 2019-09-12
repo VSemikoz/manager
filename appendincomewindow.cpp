@@ -9,7 +9,9 @@ AppendIncomeWindow::AppendIncomeWindow(DataBase *db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AppendIncomeWindow)
 {
+    DataBaseConnection = db;
     ui->setupUi(this);
+
     QStringList incomeCategoryList = {"Home", "Work", "Market", "Other"};
 
     ui->comboBox_2->addItems(incomeCategoryList);
@@ -19,6 +21,7 @@ AppendIncomeWindow::AppendIncomeWindow(DataBase *db, QWidget *parent) :
     QRegExp onlyDigitalsRegExp(onlyDigitalsRegExpString);
     QRegExpValidator *incomeValidator = new QRegExpValidator(onlyDigitalsRegExp, this);
     ui->lineEdit_2->setValidator(incomeValidator);
+
 }
 
 AppendIncomeWindow::~AppendIncomeWindow()
@@ -31,9 +34,12 @@ void AppendIncomeWindow::on_buttonBox_2_accepted(){
     QString category = ui->comboBox_2->currentText();
     QDate curDate = ui->dateEdit_2->date();
     qDebug()<< income << category << curDate;
-    //db->insertIntoIncomeTable(income, category, curDate);
-    qDebug()<< "12q3123";
-
+    if (income.isEmpty()){
+        qDebug()<<"income is empty";
+    } else {
+        qDebug()<<DataBaseConnection->insertIntoIncomeTable(income, category, curDate);
+        this->~AppendIncomeWindow();
+    }
 }
 
 void AppendIncomeWindow::on_buttonBox_2_rejected(){

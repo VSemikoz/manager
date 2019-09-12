@@ -1,15 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "database.h"
+#include "appendincomewindow.h"
+#include "appendspendingwindow.h"
+
 #include <QMainWindow>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlTableModel>
 #include <QSqlQueryModel>
-
-#include "database.h"
-#include "appendincomewindow.h"
-#include "appendspendingwindow.h"
 #include <QtDebug>
 #include <QDebug>
 
@@ -24,25 +24,35 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void showDataOnTables();
+    void updateDataOnTables();
 
-     DataBase        *db;
+    DataBase        *db;
 
 
 private slots:
-    void showDataOnTables();
+
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
+
 
 private:
     Ui::MainWindow  *ui;
-
     QSqlTableModel  *model;
     AppendIncomeWindow *appendIncomeWindow;
     AppendSpendingWindow *appendSpendingWindow;
+    QSqlTableModel *incomeModel;
+    QSqlTableModel *spendingModel;
 
-
-    void setupModel(const QString &tableName, const QStringList &headers);
+    void setupIncomeModel(const QString &tableName, const QStringList &headers);
+    void setupSpendingModel(const QString &tableName, const QStringList &headers);
     void createUI();
+
+    const QString INCOME_TABLE_NAME = "income_table";
+    const QStringList INCOME_TABLE_COLUMN_NAME = {"ID", "Доход", "Категория", "Дата"};
+    const QString SPENDING_TABLE_NAME = "spending_table";
+    const QStringList SPENDING_TABLE_COLUMN_NAME = {"ID", "Траты", "Категория", "Дата"};
 };
 
 #endif

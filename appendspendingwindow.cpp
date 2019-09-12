@@ -2,12 +2,15 @@
 #include "ui_appendspendingwindow.h"
 #include <QDate>
 #include <QString>
+#include <QWidget>
+#include <QSqlDatabase>
 
-AppendSpendingWindow::AppendSpendingWindow(QWidget *parent) :
+AppendSpendingWindow::AppendSpendingWindow(DataBase *db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AppendSpendingWindow)
 {
     ui->setupUi(this);
+    DataBaseConnection = db;
 
     QStringList incomeCategoryList = {"Home", "Work", "Market", "Other"};
 
@@ -27,10 +30,17 @@ AppendSpendingWindow::~AppendSpendingWindow()
 
 void AppendSpendingWindow::on_buttonBox_2_accepted()
 {
-    QString income = ui->lineEdit->text();
+    QString spending = ui->lineEdit->text();
     QString category = ui->comboBox->currentText();
     QDate curDate = ui->dateEdit->date();
-    qDebug()<< income << category << curDate;
+    qDebug()<< spending << category << curDate;
+
+    if (spending.isEmpty()){
+        qDebug()<<"income is empty";
+    } else {
+        qDebug()<<  DataBaseConnection->insertIntoSpendingTable(spending, category, curDate);
+        this->~AppendSpendingWindow();
+    }
 }
 
 void AppendSpendingWindow::on_buttonBox_2_rejected()

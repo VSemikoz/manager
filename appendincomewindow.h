@@ -19,7 +19,6 @@ class AppendIncomeWindow : public QDialog
 public:
     explicit AppendIncomeWindow(DataBase *db, QWidget *parent = nullptr);
     ~AppendIncomeWindow();
-    DataBase *conn;
 
 private slots:
     void on_buttonBox_2_rejected();
@@ -27,6 +26,8 @@ private slots:
 
 private:
     Ui::AppendIncomeWindow *ui;
+    DataBase *DataBaseConnection;
+
 };
 
 #endif // APPENDINCOMEWINDOW_H

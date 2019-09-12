@@ -48,9 +48,7 @@ bool DataBase::openDataBase()
 }
 
 void DataBase::closeDataBase(){
-    qDebug()<< "337788sad";
     db.close();
-    qDebug()<< "337788sad111111111";
 
 }
 
@@ -68,13 +66,13 @@ bool DataBase::createTables(){
 
 QSqlQuery DataBase::getDataFromIncomeTable(){
     QSqlQuery query;
-    query.exec("SELECT * FROM income_table");
+    query.exec("SELECT income, category, date FROM income_table");
     return query;
 }
 
 QSqlQuery DataBase::getDataFromSpendingTable(){
     QSqlQuery query;
-    query.exec("SELECT * FROM spending_table");
+    query.exec("SELECT spending, category, date FROM spending_table");
     return query;
 }
 
@@ -98,9 +96,19 @@ bool DataBase::insertIntoSpendingTable(QString spending, QString category, QDate
     QSqlQuery query;
     query.prepare("INSERT INTO spending_table (spending, category, date) "
                        "VALUES (:spending, :category, :date)");
-    query.bindValue(":income", spending);
+    query.bindValue(":spending", spending);
     query.bindValue(":category", category);
     query.bindValue(":date", date);
+
+    if (!query.exec()){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+bool DataBase::deleteFromIncomeTableById(int id){
+    QSqlQuery query;
 
     if (!query.exec()){
         return false;

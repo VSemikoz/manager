@@ -24,9 +24,15 @@ public:
 
     void connectToDataBase();
     void closeDataBase();
-    //bool inserIntoTable(const QVariantList &data);
+
     bool insertIntoIncomeTable(QString income, QString category, QDate date);
     bool insertIntoSpendingTable(QString spending, QString category, QDate date);
+
+    bool deleteFromIncomeTableById(int id);
+    bool deleteFromSpendingTableById(int id);
+
+    bool updateInIncomeTableById(int id);
+    bool updateInSpendingTableById(int id);
 
     QSqlQuery getDataFromIncomeTable();
     QSqlQuery getDataFromSpendingTable();
