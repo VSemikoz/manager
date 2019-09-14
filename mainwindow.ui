@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>310</y>
+      <x>420</x>
+      <y>410</y>
       <width>111</width>
       <height>23</height>
      </rect>
@@ -30,8 +30,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>120</y>
+      <x>420</x>
+      <y>200</y>
       <width>121</width>
       <height>23</height>
      </rect>
@@ -43,9 +43,9 @@
    <widget class="QTableView" name="tableView_2">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>10</x>
       <y>240</y>
-      <width>441</width>
+      <width>411</width>
       <height>191</height>
      </rect>
     </property>
@@ -53,9 +53,9 @@
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>10</x>
       <y>40</y>
-      <width>441</width>
+      <width>411</width>
       <height>181</height>
      </rect>
     </property>
@@ -63,14 +63,27 @@
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>40</y>
+      <x>580</x>
+      <y>410</y>
       <width>75</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>Обновить</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>30</y>
+      <width>241</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
     </property>
    </widget>
   </widget>

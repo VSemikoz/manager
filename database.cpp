@@ -1,4 +1,5 @@
 #include "database.h"
+#include <QDebug>
 
 DataBase::DataBase(QObject *parent) : QObject(parent){
 
@@ -71,77 +72,22 @@ QSqlQuery DataBase::getDataFromSpendingTable(){
     return query;
 }
 
+QString DataBase::calcBalance(){
+    QSqlQuery incomeQuery = getDataFromIncomeTable();
+    QSqlQuery spendingQuery = getDataFromSpendingTable();
+    int incomeBalance = 0;
+    int spendingBalance = 0;
+    int resultBalance = 0;
 
-bool DataBase::insertIntoIncomeTable(QString income, QString category, QDate date){
-    QSqlQuery query;
-    query.prepare("INSERT INTO income_table (income, category, date) "
-                       "VALUES (:income, :category, :date)");
-    query.bindValue(":income", income);
-    query.bindValue(":category", category);
-    query.bindValue(":date", date);
-
-    if (!query.exec()){
-        return false;
-    } else {
-        return true;
+    while (incomeQuery.next()) {
+      incomeBalance += incomeQuery.value(0).toInt();
     }
+    while (spendingQuery.next()) {
+      spendingBalance += spendingQuery.value(0).toInt();
+    }
+
+    resultBalance = incomeBalance - spendingBalance;
+
+    return QString::number(resultBalance);
 }
 
-bool DataBase::insertIntoSpendingTable(QString spending, QString category, QDate date){
-    QSqlQuery query;
-    query.prepare("INSERT INTO spending_table (spending, category, date) "
-                       "VALUES (:spending, :category, :date)");
-    query.bindValue(":spending", spending);
-    query.bindValue(":category", category);
-    query.bindValue(":date", date);
-
-    if (!query.exec()){
-        return false;
-    } else {
-        return true;
-    }
-}
-
-bool DataBase::updateInIncomeTableById(const int id, QString income, QString category, QDate date){
-    QSqlQuery query;
-    query.prepare("UPDATE spending_table SET"
-                    "ID=:ID"
-                    "income=:income"
-                    "category=:category"
-                    "date=:date"
-                    "WHERE ID =:ID");
-
-    query.bindValue(":ID", id);
-    query.bindValue(":income", income);
-    query.bindValue(":category", category);
-    query.bindValue(":ID", id);
-    query.bindValue(":date", date);
-
-    if (!query.exec()){
-        return false;
-    } else {
-        return true;
-    }
-}
-
-bool DataBase::updateInSpendingTableById(const int id, QString income, QString category, QDate date){
-    QSqlQuery query;
-    query.prepare("UPDATE income_table SET"
-                    "ID=:ID"
-                    "income=:income"
-                    "category=:category"
-                    "date=:date"
-                    "WHERE ID =:ID");
-
-    query.bindValue(":ID", id);
-    query.bindValue(":income", income);
-    query.bindValue(":category", category);
-    query.bindValue(":ID", id);
-    query.bindValue(":date", date);
-
-    if (!query.exec()){
-        return false;
-    } else {
-        return true;
-    }
-}

@@ -37,6 +37,8 @@ public:
     QSqlQuery getDataFromIncomeTable();
     QSqlQuery getDataFromSpendingTable();
 
+    QString calcBalance();
+
 private:
     QSqlDatabase    db;
     QString createIncomeTableQuery = "CREATE TABLE  income_table  ("

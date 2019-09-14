@@ -55,6 +55,7 @@ private:
 
     void setupIncomeModel(const QString &tableName, const QStringList &headers);
     void setupSpendingModel(const QString &tableName, const QStringList &headers);
+    void setupBalaceModel();
     void createUI();
 
     const QString INCOME_TABLE_NAME = "income_table";

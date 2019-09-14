@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
+#include <QStandardItemModel>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,14 +12,29 @@ MainWindow::MainWindow(QWidget *parent) :
     db = new DataBase();
     db->connectToDataBase();
     this->setupIncomeModel(INCOME_TABLE_NAME, INCOME_TABLE_COLUMN_NAME);
-    this->setupSpendingModel(SPENDING_TABLE_NAME, SPENDING_TABLE_COLUMN_NAME);
+    //this->setupSpendingModel(SPENDING_TABLE_NAME, SPENDING_TABLE_COLUMN_NAME);
+
+    //ui->label->setText("Текущий баланс: " + db->calcBalance());
+
     updateDataOnTables();
+    db->calcBalance();
 }
 
 MainWindow::~MainWindow(){
     db->closeDataBase();
     delete ui;
 
+}
+
+void MainWindow::setupBalaceModel(){
+    QStandardItemModel *model = new QStandardItemModel(1,1);
+    QStandardItem *item1 = new QStandardItem(QStringLiteral("test"));
+    model->setItem(0, 0, item1);
+
+    QDataWidgetMapper *mapper = new QDataWidgetMapper();
+    mapper->setModel(model);
+    mapper->addMapping(ui->label,0,"text");
+    mapper->toFirst();
 }
 
 void MainWindow::setupIncomeModel(const QString &tableName, const QStringList &headers){
