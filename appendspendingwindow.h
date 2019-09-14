@@ -17,7 +17,7 @@ class AppendSpendingWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit AppendSpendingWindow( DataBase *db, int row = -1, QWidget *parent = nullptr);
+    explicit AppendSpendingWindow(DataBase *db, int row = -1, QWidget *parent = nullptr);
     ~AppendSpendingWindow();
 
 signals:

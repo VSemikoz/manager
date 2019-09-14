@@ -17,14 +17,17 @@ TEMPLATE = app
 SOURCES += main.cpp\
     appendincomewindow.cpp \
     appendspendingwindow.cpp \
+    categoryreportwindow.cpp \
     database.cpp \
     mainwindow.cpp \
 
 HEADERS  += mainwindow.h \
     appendincomewindow.h \
     appendspendingwindow.h \
+    categoryreportwindow.h \
     database.h \
 
 FORMS    += mainwindow.ui \
     appendincomewindow.ui \
     appendspendingwindow.ui \
+    categoryreportwindow.ui

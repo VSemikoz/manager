@@ -4,6 +4,7 @@
 #include "database.h"
 #include "appendincomewindow.h"
 #include "appendspendingwindow.h"
+#include "categoryreportwindow.h"
 
 #include <QMainWindow>
 #include <QSqlDatabase>
@@ -12,6 +13,7 @@
 #include <QSqlQueryModel>
 #include <QtDebug>
 #include <QDebug>
+#include <QStandardItemModel>
 
 namespace Ui {
 class MainWindow;
@@ -45,6 +47,8 @@ private slots:
     void slotRemoveRecordFromIncome();
     void slotRemoveRecordFromSpending();
 
+    void on_action_triggered();
+
 private:
     Ui::MainWindow  *ui;
     QSqlTableModel  *model;
@@ -52,6 +56,9 @@ private:
     AppendSpendingWindow *appendSpendingWindow;
     QSqlTableModel *incomeModel;
     QSqlTableModel *spendingModel;
+
+    QStandardItemModel *balanceModel;
+    QDataWidgetMapper *mapper;
 
     void setupIncomeModel(const QString &tableName, const QStringList &headers);
     void setupSpendingModel(const QString &tableName, const QStringList &headers);

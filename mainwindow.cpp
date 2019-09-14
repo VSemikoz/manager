@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
-#include <QStandardItemModel>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,13 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("Финансовый Менеджер");
     db = new DataBase();
     db->connectToDataBase();
-    this->setupIncomeModel(INCOME_TABLE_NAME, INCOME_TABLE_COLUMN_NAME);
-    //this->setupSpendingModel(SPENDING_TABLE_NAME, SPENDING_TABLE_COLUMN_NAME);
-
-    //ui->label->setText("Текущий баланс: " + db->calcBalance());
+    setupIncomeModel(INCOME_TABLE_NAME, INCOME_TABLE_COLUMN_NAME);
+    setupSpendingModel(SPENDING_TABLE_NAME, SPENDING_TABLE_COLUMN_NAME);
+    setupBalaceModel();
 
     updateDataOnTables();
-    db->calcBalance();
+
 }
 
 MainWindow::~MainWindow(){
@@ -27,12 +26,13 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::setupBalaceModel(){
-    QStandardItemModel *model = new QStandardItemModel(1,1);
+    ui->label->show();
+    balanceModel = new QStandardItemModel(1,1);
     QStandardItem *item1 = new QStandardItem(QStringLiteral("test"));
-    model->setItem(0, 0, item1);
+    balanceModel->setItem(0, 0, item1);
 
-    QDataWidgetMapper *mapper = new QDataWidgetMapper();
-    mapper->setModel(model);
+    mapper = new QDataWidgetMapper();
+    mapper->setModel(balanceModel);
     mapper->addMapping(ui->label,0,"text");
     mapper->toFirst();
 }
@@ -78,7 +78,7 @@ void MainWindow::setupSpendingModel(const QString &tableName, const QStringList 
 }
 void MainWindow::slotIncomeMenuRequested(QPoint pos){
     QMenu * menu = new QMenu(this);
-    QAction * deleteDevice = new QAction(trUtf8("Удалить"), this);
+    QAction * deleteDevice = new QAction("Удалить", this);
     connect(deleteDevice, SIGNAL(triggered()), this, SLOT(slotRemoveRecordFromIncome()));
     menu->addAction(deleteDevice);
     menu->popup(ui->tableView->viewport()->mapToGlobal(pos));
@@ -86,7 +86,7 @@ void MainWindow::slotIncomeMenuRequested(QPoint pos){
 
 void MainWindow::slotSpendingMenuRequested(QPoint pos){
     QMenu * menu = new QMenu(this);
-    QAction * deleteDevice = new QAction(trUtf8("Удалить"), this);
+    QAction * deleteDevice = new QAction("Удалить", this);
     connect(deleteDevice, SIGNAL(triggered()), this, SLOT(slotRemoveRecordFromSpending()));
     menu->addAction(deleteDevice);
     menu->popup(ui->tableView_2->viewport()->mapToGlobal(pos));
@@ -96,19 +96,19 @@ void MainWindow::slotRemoveRecordFromIncome(){
     int row = ui->tableView->selectionModel()->currentIndex().row();
      if(row >= 0){
         if (QMessageBox::warning(this,
-                              trUtf8("Удаление записи"),
-                              trUtf8("Вы уверены, что хотите удалить эту запись?"),
+                              "Удаление записи",
+                              "Вы уверены, что хотите удалить эту запись?",
                               QMessageBox::Yes | QMessageBox::No) == QMessageBox::No){
                 QSqlDatabase::database().rollback();
                 return;
                 } else {
                     if(!incomeModel->removeRow(row)){
-                        QMessageBox::warning(this,trUtf8("Уведомление"),
-                        trUtf8("Не удалось удалить запись\n"
+                        QMessageBox::warning(this,"Уведомление",
+                        "Не удалось удалить запись\n"
                         "Возможно она используется другими таблицами\n"
-                        "Проверьте все зависимости и повторите попытку"));
+                        "Проверьте все зависимости и повторите попытку");
                     }
-                        incomeModel->select();
+                        slotIncomeUpdateModels();
                         ui->tableView->setCurrentIndex(incomeModel->index(-1, -1));
          }
      }
@@ -118,19 +118,19 @@ void MainWindow::slotRemoveRecordFromSpending(){
     int row = ui->tableView_2->selectionModel()->currentIndex().row();
      if(row >= 0){
         if (QMessageBox::warning(this,
-                              trUtf8("Удаление записи"),
-                              trUtf8("Вы уверены, что хотите удалить эту запись?"),
+                              "Удаление записи",
+                              "Вы уверены, что хотите удалить эту запись?",
                               QMessageBox::Yes | QMessageBox::No) == QMessageBox::No){
                 QSqlDatabase::database().rollback();
                 return;
                 } else {
                     if(!spendingModel->removeRow(row)){
-                        QMessageBox::warning(this,trUtf8("Уведомление"),
-                        trUtf8("Не удалось удалить запись\n"
+                        QMessageBox::warning(this,"Уведомление",
+                        "Не удалось удалить запись\n"
                         "Возможно она используется другими таблицами\n"
-                        "Проверьте все зависимости и повторите попытку"));
+                        "Проверьте все зависимости и повторите попытку");
                     }
-                        spendingModel->select();
+                        slotSpendingUpdateModels();
                         ui->tableView_2->setCurrentIndex(spendingModel->index(-1, -1));
          }
      }
@@ -140,7 +140,7 @@ void MainWindow::on_pushButton_clicked(){
     AppendIncomeWindow *addAppendIncomeDialog = new AppendIncomeWindow(db);
     addAppendIncomeDialog->setModal(true);
     connect(addAppendIncomeDialog, SIGNAL(signalIncomeUpdate()), this, SLOT(slotIncomeUpdateModels()));
-    addAppendIncomeDialog->setWindowTitle(trUtf8("Добавить доходы"));
+    addAppendIncomeDialog->setWindowTitle("Добавить доходы");
     addAppendIncomeDialog->exec();
 }
 
@@ -149,7 +149,7 @@ void MainWindow::on_pushButton_2_clicked(){
     AppendSpendingWindow *addAppendSpendingDialog = new AppendSpendingWindow(db);
     addAppendSpendingDialog->setModal(true);
     connect(addAppendSpendingDialog, SIGNAL(signalSpendingUpdate()), this, SLOT(slotSpendingUpdateModels()));
-    addAppendSpendingDialog->setWindowTitle(trUtf8("Добавить траты"));
+    addAppendSpendingDialog->setWindowTitle("Добавить траты");
     addAppendSpendingDialog->exec();
 }
 
@@ -159,27 +159,40 @@ void MainWindow::on_pushButton_3_clicked(){
 
 void MainWindow::slotIncomeUpdateModels(){
     incomeModel->select();
+    balanceModel->setData(balanceModel->index(0,0),
+                          "Текущий баланс: " + db->calcBalance());
 }
 
 void MainWindow::slotSpendingUpdateModels(){
     spendingModel->select();
+    balanceModel->setData(balanceModel->index(0,0),
+                          "Текущий баланс: " + db->calcBalance());
 }
 
 void MainWindow::updateDataOnTables(){
     incomeModel->select();
     spendingModel->select();
+    balanceModel->setData(balanceModel->index(0,0),
+                          "Текущий баланс: " + db->calcBalance());
 }
 
 void MainWindow::slotEditIncomeRecord(QModelIndex index){
      AppendIncomeWindow *addDeviceDialog = new AppendIncomeWindow(db, index.row());
      connect(addDeviceDialog, SIGNAL(signalIncomeUpdate()), this, SLOT(slotIncomeUpdateModels()));
-     addDeviceDialog->setWindowTitle(trUtf8("Редактировать доход"));
+     addDeviceDialog->setWindowTitle("Редактировать доход");
      addDeviceDialog->exec();
 
 }
 void MainWindow::slotEditSpendingRecord(QModelIndex index){
     AppendSpendingWindow *addDeviceDialog = new AppendSpendingWindow(db, index.row());
     connect(addDeviceDialog, SIGNAL(signalSpendingUpdate()), this, SLOT(slotSpendingUpdateModels()));
-    addDeviceDialog->setWindowTitle(trUtf8("Редактировать траты"));
+    addDeviceDialog->setWindowTitle("Редактировать траты");
+    addDeviceDialog->exec();
+}
+
+void MainWindow::on_action_triggered()
+{
+    CategoryReportWindow *addDeviceDialog = new CategoryReportWindow(db);
+    addDeviceDialog->setWindowTitle("Отчет по категориям");
     addDeviceDialog->exec();
 }

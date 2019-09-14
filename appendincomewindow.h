@@ -18,7 +18,7 @@ class AppendIncomeWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit AppendIncomeWindow( DataBase *db, int index = -1, QWidget *parent = nullptr);
+    explicit AppendIncomeWindow(DataBase *db, int index = -1, QWidget *parent = nullptr);
     ~AppendIncomeWindow();
 
 signals:

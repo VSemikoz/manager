@@ -91,3 +91,40 @@ QString DataBase::calcBalance(){
     return QString::number(resultBalance);
 }
 
+QMap<QString, int> DataBase::getIncomeCategoryReport(){
+    QSqlQuery incomeQuery = getDataFromIncomeTable();
+    QMap<QString, int> categoryIncomeMap;    
+    QString category;
+    int income;
+
+    while (incomeQuery.next()) {
+
+      category = incomeQuery.value(1).toString();
+      income = incomeQuery.value(0).toInt();
+
+      if(categoryIncomeMap.contains(category)){
+          categoryIncomeMap[category] +=  income;
+        } else
+          categoryIncomeMap[category] =  income;
+    }
+    return categoryIncomeMap;
+}
+
+QMap<QString, int> DataBase::getSpendingCategoryReport(){
+    QSqlQuery spendingQuery = getDataFromSpendingTable();
+    QMap<QString, int> categorySpendingMap;
+    QString category;
+    int spending;
+
+    while (spendingQuery.next()) {
+
+      category = spendingQuery.value(1).toString();
+      spending = spendingQuery.value(0).toInt();
+
+      if(categorySpendingMap.contains(category)){
+          categorySpendingMap[category] +=  spending;
+        } else
+          categorySpendingMap[category] =  spending;
+    }
+    return categorySpendingMap;
+}

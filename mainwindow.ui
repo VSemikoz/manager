@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>482</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -96,8 +96,26 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Отчет</string>
+    </property>
+    <addaction name="action"/>
+    <addaction name="action_2"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="action">
+   <property name="text">
+    <string>...по категориям</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>...за период</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

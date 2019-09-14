@@ -28,16 +28,12 @@ public:
     bool insertIntoIncomeTable(QString income, QString category, QDate date);
     bool insertIntoSpendingTable(QString spending, QString category, QDate date);
 
-    bool deleteFromIncomeTableById(const int id);
-    bool deleteFromSpendingTableById(const int id);
-
-    bool updateInIncomeTableById(const int id, QString income, QString category, QDate date);
-    bool updateInSpendingTableById(const int id, QString spending, QString category, QDate date);
-
     QSqlQuery getDataFromIncomeTable();
     QSqlQuery getDataFromSpendingTable();
 
     QString calcBalance();
+    QMap<QString, int> getIncomeCategoryReport();
+    QMap<QString, int> getSpendingCategoryReport();
 
 private:
     QSqlDatabase    db;
