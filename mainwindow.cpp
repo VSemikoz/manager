@@ -196,3 +196,10 @@ void MainWindow::on_action_triggered()
     addDeviceDialog->setWindowTitle("Отчет по категориям");
     addDeviceDialog->exec();
 }
+
+void MainWindow::on_action_2_triggered()
+{
+    PeriodReportWindow *addDeviceDialog = new PeriodReportWindow(db);
+    addDeviceDialog->setWindowTitle("Отчет за период");
+    addDeviceDialog->exec();
+}

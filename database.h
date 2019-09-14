@@ -34,6 +34,8 @@ public:
     QString calcBalance();
     QMap<QString, int> getIncomeCategoryReport();
     QMap<QString, int> getSpendingCategoryReport();
+    QMap<QDate, int> getIncomePeriodReport(QDate firstDate, QDate secondDate);
+    QMap<QDate, int> getSpendingPeriodReport(QDate firstDate, QDate secondDate);
 
 private:
     QSqlDatabase    db;

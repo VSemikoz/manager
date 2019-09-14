@@ -20,14 +20,17 @@ SOURCES += main.cpp\
     categoryreportwindow.cpp \
     database.cpp \
     mainwindow.cpp \
+    periodreportwindow.cpp
 
 HEADERS  += mainwindow.h \
     appendincomewindow.h \
     appendspendingwindow.h \
     categoryreportwindow.h \
     database.h \
+    periodreportwindow.h
 
 FORMS    += mainwindow.ui \
     appendincomewindow.ui \
     appendspendingwindow.ui \
-    categoryreportwindow.ui
+    categoryreportwindow.ui \
+    periodreportwindow.ui

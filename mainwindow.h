@@ -5,6 +5,7 @@
 #include "appendincomewindow.h"
 #include "appendspendingwindow.h"
 #include "categoryreportwindow.h"
+#include "periodreportwindow.h"
 
 #include <QMainWindow>
 #include <QSqlDatabase>
@@ -48,6 +49,8 @@ private slots:
     void slotRemoveRecordFromSpending();
 
     void on_action_triggered();
+
+    void on_action_2_triggered();
 
 private:
     Ui::MainWindow  *ui;

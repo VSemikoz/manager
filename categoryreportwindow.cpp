@@ -13,8 +13,6 @@ CategoryReportWindow::CategoryReportWindow(DataBase *db, QWidget *parent) :
     showIncomeData();
     showSpendingData();
 
-
-
 }
 
 CategoryReportWindow::~CategoryReportWindow()

@@ -128,3 +128,44 @@ QMap<QString, int> DataBase::getSpendingCategoryReport(){
     }
     return categorySpendingMap;
 }
+
+QMap<QDate, int> DataBase::getIncomePeriodReport(QDate firstDate, QDate secondDate){
+    QSqlQuery incomeQuery = getDataFromIncomeTable();
+    QMap<QDate, int> categoryIncomeMap;
+    QDate date;
+    int income;
+
+    while (incomeQuery.next()) {
+
+      date = incomeQuery.value(2).toDate();
+      income = incomeQuery.value(0).toInt();
+      if (date >= firstDate && date <= secondDate){
+          if(categoryIncomeMap.contains(date)){
+              categoryIncomeMap[date] +=  income;
+            } else
+              categoryIncomeMap[date] =  income;
+        }
+      }
+
+    return categoryIncomeMap;
+}
+QMap<QDate, int> DataBase::getSpendingPeriodReport(QDate firstDate, QDate secondDate){
+    QSqlQuery spendingQuery = getDataFromSpendingTable();
+    QMap<QDate, int> categorySpendingMap;
+    QDate date;
+    int spending;
+
+    while (spendingQuery.next()) {
+
+      date = spendingQuery.value(2).toDate();
+      spending = spendingQuery.value(0).toInt();
+      if (date >= firstDate && date <= secondDate){
+          if(categorySpendingMap.contains(date)){
+              categorySpendingMap[date] +=  spending;
+            } else
+              categorySpendingMap[date] =  spending;
+        }
+      }
+
+    return categorySpendingMap;
+}
