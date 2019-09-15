@@ -12,14 +12,24 @@ PeriodReportWindow::PeriodReportWindow(DataBase *db, QWidget *parent) :
     ui->secondTimeDateEdit->setDate(QDate::currentDate());
     setupIncomeModel();
     setupSpendingModel();
-
-
+    setupBalaceModel();
 }
 
 PeriodReportWindow::~PeriodReportWindow(){
     delete ui;
 }
 
+void PeriodReportWindow::setupBalaceModel(){
+    ui->balanceLabel->show();
+    balanceModel = new QStandardItemModel(1,1);
+    QStandardItem *item1 = new QStandardItem(QStringLiteral("text"));
+    balanceModel->setItem(0, 0, item1);
+
+    mapper = new QDataWidgetMapper();
+    mapper->setModel(balanceModel);
+    mapper->addMapping(ui->balanceLabel,0,"Итого за период: ");
+    mapper->toFirst();
+}
 void PeriodReportWindow::setupIncomeModel(){
     incomeModel = new QStandardItemModel(this);
     QStringList horizontalHeader;
@@ -29,9 +39,10 @@ void PeriodReportWindow::setupIncomeModel(){
     ui->incomeTableView->setModel(incomeModel);
     ui->incomeTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->incomeTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->incomeTableView->resizeColumnsToContents();
     ui->incomeTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->incomeTableView->horizontalHeader()->setStretchLastSection(true);
+    ui->incomeTableView->setColumnWidth(0, ui->incomeTableView->width() * 0.4);
+    ui->incomeTableView->setColumnWidth(1, ui->incomeTableView->width() * 0.4);
 }
 
 void PeriodReportWindow::setupSpendingModel(){
@@ -43,9 +54,10 @@ void PeriodReportWindow::setupSpendingModel(){
     ui->spendingTableView->setModel(spendingModel);
     ui->spendingTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->spendingTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->spendingTableView->resizeColumnsToContents();
     ui->spendingTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->spendingTableView->horizontalHeader()->setStretchLastSection(true);
+    ui->spendingTableView->setColumnWidth(0, ui->spendingTableView->width() * 0.4);
+    ui->spendingTableView->setColumnWidth(1, ui->spendingTableView->width() * 0.4);
 }
 void PeriodReportWindow::showIncomeData(QDate firstTime, QDate secondTime){
 
@@ -86,6 +98,8 @@ void PeriodReportWindow::on_acceptButton_clicked(){
     QDate secondTime = ui->secondTimeDateEdit->date();
     showIncomeData(firstTime, secondTime);
     showSpendingData(firstTime, secondTime);
+    balanceModel->setData(balanceModel->index(0,0),
+                          "Баланс за период: " + DataBaseConnection->calcBalancePerPeriod(firstTime, secondTime));
 }
 
 void PeriodReportWindow::on_cancelButton_clicked(){

@@ -19,7 +19,7 @@ AppendIncomeWindow::AppendIncomeWindow( DataBase *db, int row, QWidget *parent) 
         mapper->setCurrentModelIndex(model->index(row,0));
     }
 
-    QStringList incomeCategoryList = {"Home", "Work", "Market", "Other"};
+    QStringList incomeCategoryList = {"Зарплата", "Подарок", "Аванс", "Другое"};
 
     ui->comboBox_2->addItems(incomeCategoryList);
     ui->dateEdit_2->setDate(QDate::currentDate());

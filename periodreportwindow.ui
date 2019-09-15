@@ -72,12 +72,12 @@
     <string>Доходы за период</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>280</x>
      <y>380</y>
-     <width>191</width>
+     <width>203</width>
      <height>22</height>
     </rect>
    </property>
@@ -104,7 +104,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>300</x>

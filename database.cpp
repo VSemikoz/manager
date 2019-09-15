@@ -85,7 +85,29 @@ QString DataBase::calcBalance(){
     while (spendingQuery.next()) {
       spendingBalance += spendingQuery.value(0).toInt();
     }
+    resultBalance = incomeBalance - spendingBalance;
+    return QString::number(resultBalance);
+}
 
+QString DataBase::calcBalancePerPeriod(QDate firstTime, QDate SecndTime){
+    QSqlQuery incomeQuery = getDataFromIncomeTable();
+    QSqlQuery spendingQuery = getDataFromSpendingTable();
+    QDate incomeDate;
+    QDate spendingDate;
+    int incomeBalance = 0;
+    int spendingBalance = 0;
+    int resultBalance = 0;
+
+    while (incomeQuery.next()) {
+        incomeDate = incomeQuery.value(2).toDate();
+        if (incomeDate >= firstTime && incomeDate <= SecndTime)
+            incomeBalance += incomeQuery.value(0).toInt();
+    }
+    while (spendingQuery.next()) {
+        spendingDate = spendingQuery.value(2).toDate();
+        if (spendingDate >= firstTime && spendingDate <= SecndTime)
+            spendingBalance += spendingQuery.value(0).toInt();
+    }
     resultBalance = incomeBalance - spendingBalance;
 
     return QString::number(resultBalance);
@@ -168,4 +190,54 @@ QMap<QDate, int> DataBase::getSpendingPeriodReport(QDate firstDate, QDate second
       }
 
     return categorySpendingMap;
+}
+QMap<double, double> DataBase::getBalancePeriodReport(QDate firstDate, QDate secondDate){
+    QMap<QDate, int> spendingPeriodMap = getSpendingPeriodReport(firstDate, secondDate);
+    QMap<QDate, int> incomePeriodMap = getIncomePeriodReport(firstDate, secondDate);
+    QMap<QDate, int> balancePeriodMap;
+    QMap<double, double> doubleBalancePeriodMap;
+    QMap<double, double> sortBalancePeriodMap;
+    double prevMinKey;
+    double prevValue;
+    double minKey;
+
+    QList<QDate> spendingKeys = spendingPeriodMap.keys();
+    QList<QDate> incomeKeys = incomePeriodMap.keys();
+
+    for(int i = 0; i < spendingKeys.count(); i++){
+        if(balancePeriodMap.contains(spendingKeys[i]))
+            balancePeriodMap[spendingKeys[i]] -= spendingPeriodMap[spendingKeys[i]];
+        else
+            balancePeriodMap[spendingKeys[i]] = -spendingPeriodMap[spendingKeys[i]];
+
+    }
+    for(int i = 0; i < incomeKeys.count(); i++){
+        if(balancePeriodMap.contains(incomeKeys[i]))
+            balancePeriodMap[incomeKeys[i]] += incomePeriodMap[incomeKeys[i]];
+        else
+            balancePeriodMap[incomeKeys[i]] = incomePeriodMap[incomeKeys[i]];
+    }
+    for (int i = 0; i < balancePeriodMap.keys().count(); i++){
+        double timeT = QDateTime(balancePeriodMap.keys()[i]).toTime_t();
+        double blanceDouble = (double) balancePeriodMap[balancePeriodMap.keys()[i]];
+        doubleBalancePeriodMap[timeT] = blanceDouble;
+    }
+
+
+    while (!doubleBalancePeriodMap.isEmpty()) {
+        minKey = doubleBalancePeriodMap.keys()[0];
+        for (int j = 0; j < doubleBalancePeriodMap.keys().count(); j++){
+            if (minKey >= doubleBalancePeriodMap.keys()[j])
+                minKey = doubleBalancePeriodMap.keys()[j];
+        }
+        if(sortBalancePeriodMap.isEmpty())
+            sortBalancePeriodMap[minKey] = doubleBalancePeriodMap.value(minKey);
+        else
+            sortBalancePeriodMap[minKey] = doubleBalancePeriodMap.value(minKey) + prevValue;
+
+        prevMinKey = minKey;
+        prevValue = sortBalancePeriodMap[minKey];
+        doubleBalancePeriodMap.remove(minKey);
+    }
+    return sortBalancePeriodMap;
 }

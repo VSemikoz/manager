@@ -190,16 +190,20 @@ void MainWindow::slotEditSpendingRecord(QModelIndex index){
     addDeviceDialog->exec();
 }
 
-void MainWindow::on_action_triggered()
-{
+void MainWindow::on_action_triggered(){
     CategoryReportWindow *addDeviceDialog = new CategoryReportWindow(db);
     addDeviceDialog->setWindowTitle("Отчет по категориям");
     addDeviceDialog->exec();
 }
 
-void MainWindow::on_action_2_triggered()
-{
+void MainWindow::on_action_2_triggered(){
     PeriodReportWindow *addDeviceDialog = new PeriodReportWindow(db);
     addDeviceDialog->setWindowTitle("Отчет за период");
+    addDeviceDialog->exec();
+}
+
+void MainWindow::on_action_3_triggered(){
+    BalanceChartWindow *addDeviceDialog = new BalanceChartWindow(db);
+    addDeviceDialog->setWindowTitle("Баланс за весь период");
     addDeviceDialog->exec();
 }

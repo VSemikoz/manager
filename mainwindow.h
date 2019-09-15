@@ -6,6 +6,7 @@
 #include "appendspendingwindow.h"
 #include "categoryreportwindow.h"
 #include "periodreportwindow.h"
+#include "balancechartwindow.h"
 
 #include <QMainWindow>
 #include <QSqlDatabase>
@@ -51,6 +52,8 @@ private slots:
     void on_action_triggered();
 
     void on_action_2_triggered();
+
+    void on_action_3_triggered();
 
 private:
     Ui::MainWindow  *ui;

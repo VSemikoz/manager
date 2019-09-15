@@ -19,9 +19,9 @@ AppendSpendingWindow::AppendSpendingWindow(DataBase *db, int row, QWidget *paren
         mapper->setCurrentModelIndex(model->index(row,0));
     }
 
-    QStringList incomeCategoryList = {"Home", "Work", "Market", "Other"};
+    QStringList spendingCategoryList = {"Магазин", "Налоги", "Услуги", "Другое"};
 
-    ui->comboBox->addItems(incomeCategoryList);
+    ui->comboBox->addItems(spendingCategoryList);
     ui->dateEdit->setDate(QDate::currentDate());
 
     QString onlyDigitalsRegExpString = "([0-9]+$)";

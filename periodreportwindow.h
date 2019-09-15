@@ -5,6 +5,7 @@
 
 #include <QDialog>
 #include <QStandardItemModel>
+#include <QDataWidgetMapper>
 
 namespace Ui {
 class PeriodReportWindow;
@@ -26,10 +27,13 @@ private:
     Ui::PeriodReportWindow *ui;
     QStandardItemModel *incomeModel;
     QStandardItemModel *spendingModel;
+    QStandardItemModel *balanceModel;
     DataBase *DataBaseConnection;
+    QDataWidgetMapper *mapper;
 
     void setupIncomeModel();
     void setupSpendingModel();
+    void setupBalaceModel();
     void showIncomeData(QDate firstTime, QDate secondTime);
     void showSpendingData(QDate firstTime, QDate secondTime);
 };

@@ -32,10 +32,15 @@ public:
     QSqlQuery getDataFromSpendingTable();
 
     QString calcBalance();
+    QString calcBalancePerPeriod(QDate firstTime, QDate SecndTime);
+
     QMap<QString, int> getIncomeCategoryReport();
     QMap<QString, int> getSpendingCategoryReport();
     QMap<QDate, int> getIncomePeriodReport(QDate firstDate, QDate secondDate);
     QMap<QDate, int> getSpendingPeriodReport(QDate firstDate, QDate secondDate);
+    QMap<double, double> getBalancePeriodReport(QDate firstDate, QDate secondDate);
+    QVector<QDate> getDateVector();
+    QVector<int> getBalanceVector();
 
 private:
     QSqlDatabase    db;
