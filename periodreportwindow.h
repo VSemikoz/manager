@@ -25,10 +25,10 @@ private slots:
 
 private:
     Ui::PeriodReportWindow *ui;
+    DataBase *DataBaseConnection;
     QStandardItemModel *incomeModel;
     QStandardItemModel *spendingModel;
     QStandardItemModel *balanceModel;
-    DataBase *DataBaseConnection;
     QDataWidgetMapper *mapper;
 
     void setupIncomeModel();

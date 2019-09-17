@@ -3,11 +3,9 @@
 
 PeriodReportWindow::PeriodReportWindow(DataBase *db, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::PeriodReportWindow)
-{
+    ui(new Ui::PeriodReportWindow){
     ui->setupUi(this);
     DataBaseConnection = db;
-
     ui->firstTimeDateEdit->setDate(QDate::currentDate());
     ui->secondTimeDateEdit->setDate(QDate::currentDate());
     setupIncomeModel();
@@ -20,16 +18,17 @@ PeriodReportWindow::~PeriodReportWindow(){
 }
 
 void PeriodReportWindow::setupBalaceModel(){
-    ui->balanceLabel->show();
+    ui->periodBalanceLabel->show();
     balanceModel = new QStandardItemModel(1,1);
-    QStandardItem *item1 = new QStandardItem(QStringLiteral("text"));
+    QStandardItem *item1 = new QStandardItem(QStringLiteral("Баланс за период: "));
     balanceModel->setItem(0, 0, item1);
 
     mapper = new QDataWidgetMapper();
     mapper->setModel(balanceModel);
-    mapper->addMapping(ui->balanceLabel,0,"Итого за период: ");
+    mapper->addMapping(ui->periodBalanceLabel,0,"text");
     mapper->toFirst();
 }
+
 void PeriodReportWindow::setupIncomeModel(){
     incomeModel = new QStandardItemModel(this);
     QStringList horizontalHeader;
@@ -59,6 +58,7 @@ void PeriodReportWindow::setupSpendingModel(){
     ui->spendingTableView->setColumnWidth(0, ui->spendingTableView->width() * 0.4);
     ui->spendingTableView->setColumnWidth(1, ui->spendingTableView->width() * 0.4);
 }
+
 void PeriodReportWindow::showIncomeData(QDate firstTime, QDate secondTime){
 
     QStandardItem *dateItem;
@@ -75,6 +75,7 @@ void PeriodReportWindow::showIncomeData(QDate firstTime, QDate secondTime){
 
     }
 }
+
 void PeriodReportWindow::showSpendingData(QDate firstTime, QDate secondTime){
 
     QStandardItem *dateItem;
@@ -93,7 +94,8 @@ void PeriodReportWindow::showSpendingData(QDate firstTime, QDate secondTime){
 }
 
 void PeriodReportWindow::on_acceptButton_clicked(){
-
+    spendingModel->clear();
+    incomeModel->clear();
     QDate firstTime = ui->firstTimeDateEdit->date();
     QDate secondTime = ui->secondTimeDateEdit->date();
     showIncomeData(firstTime, secondTime);

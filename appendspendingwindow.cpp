@@ -1,9 +1,5 @@
 #include "appendspendingwindow.h"
 #include "ui_appendspendingwindow.h"
-#include <QDate>
-#include <QString>
-#include <QWidget>
-#include <QSqlDatabase>
 
 AppendSpendingWindow::AppendSpendingWindow(DataBase *db, int row, QWidget *parent) :
     QDialog(parent),
@@ -15,21 +11,22 @@ AppendSpendingWindow::AppendSpendingWindow(DataBase *db, int row, QWidget *paren
         model->insertRow(model->rowCount(QModelIndex()));
         mapper->toLast();
     } else {
-        qDebug()<<model->index(row,0);
         mapper->setCurrentModelIndex(model->index(row,0));
     }
-
-    QStringList spendingCategoryList = {"Магазин", "Налоги", "Услуги", "Другое"};
-
-    ui->comboBox->addItems(spendingCategoryList);
-    ui->dateEdit->setDate(QDate::currentDate());
-
-    QString onlyDigitalsRegExpString = "([0-9]+$)";
-    QRegExp onlyDigitalsRegExp(onlyDigitalsRegExpString);
-    QRegExpValidator *incomeValidator = new QRegExpValidator(onlyDigitalsRegExp, this);
-    ui->lineEdit->setValidator(incomeValidator);
+    setupUI();
 }
 
+void AppendSpendingWindow::setupUI(){
+    QStringList spendingCategoryList = {"Магазин", "Долг", "Сбережения", "Кредит", "Налоги", "Услуги", "Другое"};
+
+    ui->spendingComboBox->addItems(spendingCategoryList);
+    ui->spendingDateEdit->setDate(QDate::currentDate());
+
+    QString onlyDigitalsRegExpString = "([0-9]{9})";
+    QRegExp onlyDigitalsRegExp(onlyDigitalsRegExpString);
+    QRegExpValidator *incomeValidator = new QRegExpValidator(onlyDigitalsRegExp, this);
+    ui->spendingLineEdit->setValidator(incomeValidator);
+}
 
 void AppendSpendingWindow::setupModel(){
     model = new QSqlTableModel(this);
@@ -39,9 +36,9 @@ void AppendSpendingWindow::setupModel(){
 
     mapper = new QDataWidgetMapper();
     mapper->setModel(model);
-    mapper->addMapping(ui->lineEdit, 1);
-    mapper->addMapping(ui->comboBox, 2);
-    mapper->addMapping(ui->dateEdit, 3);
+    mapper->addMapping(ui->spendingLineEdit, 1);
+    mapper->addMapping(ui->spendingComboBox, 2);
+    mapper->addMapping(ui->spendingDateEdit, 3);
 
     mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
 }
@@ -51,10 +48,14 @@ AppendSpendingWindow::~AppendSpendingWindow(){
 }
 
 void AppendSpendingWindow::on_buttonBox_2_accepted(){
+    if (ui->spendingLineEdit->text() != ""){
     mapper->submit();
     model->submitAll();
     emit signalSpendingUpdate();
     this->close();
+    } else {
+        ui->invalidInputLabel->setText("Неправильный ввод");
+    }
 }
 
 void AppendSpendingWindow::on_buttonBox_2_rejected(){

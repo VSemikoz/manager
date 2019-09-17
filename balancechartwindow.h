@@ -4,7 +4,7 @@
 #include <database.h>
 
 #include <QDialog>
-
+#include <algorithm>
 
 namespace Ui {
 class BalanceChartWindow;
@@ -20,7 +20,6 @@ public:
 
 private slots:
     void on_cancelPushButton_clicked();
-
     void on_acceptPushButton_clicked();
 
 private:

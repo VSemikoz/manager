@@ -25,40 +25,37 @@ public:
     void connectToDataBase();
     void closeDataBase();
 
-    bool insertIntoIncomeTable(QString income, QString category, QDate date);
-    bool insertIntoSpendingTable(QString spending, QString category, QDate date);
-
     QSqlQuery getDataFromIncomeTable();
     QSqlQuery getDataFromSpendingTable();
-
     QString calcBalance();
     QString calcBalancePerPeriod(QDate firstTime, QDate SecndTime);
-
     QMap<QString, int> getIncomeCategoryReport();
     QMap<QString, int> getSpendingCategoryReport();
     QMap<QDate, int> getIncomePeriodReport(QDate firstDate, QDate secondDate);
     QMap<QDate, int> getSpendingPeriodReport(QDate firstDate, QDate secondDate);
     QMap<double, double> getBalancePeriodReport(QDate firstDate, QDate secondDate);
-    QVector<QDate> getDateVector();
-    QVector<int> getBalanceVector();
 
 private:
     QSqlDatabase    db;
-    QString createIncomeTableQuery = "CREATE TABLE  income_table  ("
-                                     "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
-                                     "income INTEGER DEFAULT (0) NOT NULL,"
-                                     " category VARCHAR NOT NULL DEFAULT ('other'),"
-                                     "  date DATE DEFAULT ( (CURRENT_TIMESTAMP) ) NOT NULL)";
 
-    QString createSpendingTableQuery = "CREATE TABLE spending_table ("
+    const QString createIncomeTableQuery = "CREATE TABLE  income_table  ("
+                                     "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
+                                     "income INTEGER DEFAULT (0) NOT NULL,"
+                                     "category VARCHAR NOT NULL DEFAULT ('other'),"
+                                     "date DATE DEFAULT ( (CURRENT_TIMESTAMP) ) NOT NULL)";
+
+    const QString createSpendingTableQuery = "CREATE TABLE spending_table ("
                                        "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,"
-                                       "spending INTEGER DEFAULT (0) NOT NULL, "
+                                       "spending INTEGER DEFAULT (0) NOT NULL,"
                                        "category VARCHAR NOT NULL DEFAULT ('other'),"
-                                       " date DATE DEFAULT ( (CURRENT_TIMESTAMP) )  NOT NULL ";
+                                       "date DATE DEFAULT ( (CURRENT_TIMESTAMP) )  NOT NULL)";
+
     bool openDataBase();
     bool restoreDataBase();
     bool createTables();
 
+    QMap<double, double> convertToDoubleMap (QMap<QDate, int> balancePeriodMap);
+    QMap<double, double> sortBalancePeriodReport(QMap<double, double> doubleBalancePeriodMap);
 };
 
 #endif

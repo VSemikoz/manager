@@ -26,10 +26,10 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="spendingPushButton">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>430</x>
       <y>410</y>
       <width>111</width>
       <height>23</height>
@@ -39,10 +39,10 @@
      <string>Добавить расходы</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="incomePushButton">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>430</x>
       <y>200</y>
       <width>121</width>
       <height>23</height>
@@ -52,7 +52,7 @@
      <string>Добавить доходы</string>
     </property>
    </widget>
-   <widget class="QTableView" name="tableView_2">
+   <widget class="QTableView" name="spendingTableView">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -62,7 +62,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QTableView" name="tableView">
+   <widget class="QTableView" name="incomeTableView">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -72,7 +72,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="updatePushButton">
     <property name="geometry">
      <rect>
       <x>580</x>
@@ -85,7 +85,7 @@
      <string>Обновить</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="balanceLabel">
     <property name="geometry">
      <rect>
       <x>430</x>
@@ -96,6 +96,32 @@
     </property>
     <property name="text">
      <string>Текущий баланс:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="incomeLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>281</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Доходы</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="spendingLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>220</y>
+      <width>211</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Расходы</string>
     </property>
    </widget>
   </widget>
@@ -112,26 +138,26 @@
     <property name="title">
      <string>Отчет</string>
     </property>
-    <addaction name="action"/>
-    <addaction name="action_2"/>
-    <addaction name="action_3"/>
+    <addaction name="categoryAction"/>
+    <addaction name="periodAction"/>
+    <addaction name="periodBalanceAction"/>
    </widget>
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action">
+  <action name="categoryAction">
    <property name="text">
     <string>...по категориям</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="periodAction">
    <property name="text">
     <string>...за период</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="periodBalanceAction">
    <property name="text">
-    <string>...по балансу за весь период</string>
+    <string>...по балансу за период</string>
    </property>
   </action>
  </widget>

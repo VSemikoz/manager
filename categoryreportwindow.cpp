@@ -1,22 +1,18 @@
 #include "categoryreportwindow.h"
 #include "ui_categoryreportwindow.h"
-#include <QDebug>
 
 CategoryReportWindow::CategoryReportWindow(DataBase *db, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::CategoryReportWindow)
-{
+    ui(new Ui::CategoryReportWindow){
     ui->setupUi(this);
     DataBaseConnection = db;
     setupIncomeModel();
     setupSpendingModel();
     showIncomeData();
     showSpendingData();
-
 }
 
-CategoryReportWindow::~CategoryReportWindow()
-{
+CategoryReportWindow::~CategoryReportWindow(){
     delete ui;
 }
 
@@ -81,7 +77,6 @@ void CategoryReportWindow::showIncomeData(){
         incomeModel->setItem(i, 1, incomeItem);
     }
 }
-void CategoryReportWindow::on_pushButton_clicked()
-{
+void CategoryReportWindow::on_pushButton_clicked(){
     this->~CategoryReportWindow();
 }

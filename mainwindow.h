@@ -16,6 +16,7 @@
 #include <QtDebug>
 #include <QDebug>
 #include <QStandardItemModel>
+#include <QMessageBox>
 
 namespace Ui {
 class MainWindow;
@@ -29,40 +30,28 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void updateDataOnTables();
-    DataBase        *db;
-
 
 private slots:
-
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
-    void on_pushButton_3_clicked();
+    void on_updatePushButton_clicked();
+    void on_incomePushButton_clicked();
+    void on_spendingPushButton_clicked();
     void slotIncomeUpdateModels();
     void slotSpendingUpdateModels();
-
     void slotEditIncomeRecord(QModelIndex index);
     void slotEditSpendingRecord(QModelIndex index);
-
     void slotIncomeMenuRequested(QPoint pos);
     void slotSpendingMenuRequested(QPoint pos);
-
     void slotRemoveRecordFromIncome();
     void slotRemoveRecordFromSpending();
-
-    void on_action_triggered();
-
-    void on_action_2_triggered();
-
-    void on_action_3_triggered();
+    void on_categoryAction_triggered();
+    void on_periodAction_triggered();
+    void on_periodBalanceAction_triggered();
 
 private:
     Ui::MainWindow  *ui;
-    QSqlTableModel  *model;
-    AppendIncomeWindow *appendIncomeWindow;
-    AppendSpendingWindow *appendSpendingWindow;
+    DataBase        *db;
     QSqlTableModel *incomeModel;
     QSqlTableModel *spendingModel;
-
     QStandardItemModel *balanceModel;
     QDataWidgetMapper *mapper;
 

@@ -1,9 +1,5 @@
 #include "appendincomewindow.h"
 #include "ui_appendincomewindow.h"
-#include <QDate>
-#include <QString>
-#include <QWidget>
-#include <QSqlDatabase>
 
 AppendIncomeWindow::AppendIncomeWindow( DataBase *db, int row, QWidget *parent) :
     QDialog(parent),
@@ -15,19 +11,21 @@ AppendIncomeWindow::AppendIncomeWindow( DataBase *db, int row, QWidget *parent) 
         model->insertRow(model->rowCount(QModelIndex()));
         mapper->toLast();
     } else {
-        qDebug()<<model->index(row,0);
         mapper->setCurrentModelIndex(model->index(row,0));
     }
+    setupUI();
+}
 
+void AppendIncomeWindow::setupUI(){
     QStringList incomeCategoryList = {"Зарплата", "Подарок", "Аванс", "Другое"};
 
-    ui->comboBox_2->addItems(incomeCategoryList);
-    ui->dateEdit_2->setDate(QDate::currentDate());
+    ui->incomeComboBox->addItems(incomeCategoryList);
+    ui->incomeDateEdit->setDate(QDate::currentDate());
 
-    QString onlyDigitalsRegExpString = "([0-9]+$)";
+    QString onlyDigitalsRegExpString = "([0-9]{9})";
     QRegExp onlyDigitalsRegExp(onlyDigitalsRegExpString);
     QRegExpValidator *incomeValidator = new QRegExpValidator(onlyDigitalsRegExp, this);
-    ui->lineEdit_2->setValidator(incomeValidator);
+    ui->incomeLineEdit->setValidator(incomeValidator);
 }
 
 void AppendIncomeWindow::setupModel(){
@@ -38,9 +36,9 @@ void AppendIncomeWindow::setupModel(){
 
     mapper = new QDataWidgetMapper();
     mapper->setModel(model);
-    mapper->addMapping(ui->lineEdit_2, 1);
-    mapper->addMapping(ui->comboBox_2, 2);
-    mapper->addMapping(ui->dateEdit_2, 3);
+    mapper->addMapping(ui->incomeLineEdit, 1);
+    mapper->addMapping(ui->incomeComboBox, 2);
+    mapper->addMapping(ui->incomeDateEdit, 3);
 
     mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
 }
@@ -49,10 +47,14 @@ AppendIncomeWindow::~AppendIncomeWindow(){
 }
 
 void AppendIncomeWindow::on_buttonBox_2_accepted(){
+    if (ui->incomeLineEdit->text() != ""){
     mapper->submit();
     model->submitAll();
     emit signalIncomeUpdate();
     this->close();
+    } else {
+        ui->invalidInputLabel->setText("Неправильный ввод");
+    }
 }
 
 void AppendIncomeWindow::on_buttonBox_2_rejected(){

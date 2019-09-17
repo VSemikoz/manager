@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QMessageBox>
-
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,24 +14,22 @@ MainWindow::MainWindow(QWidget *parent) :
     setupBalaceModel();
 
     updateDataOnTables();
-
 }
 
 MainWindow::~MainWindow(){
     db->closeDataBase();
     delete ui;
-
 }
 
 void MainWindow::setupBalaceModel(){
-    ui->label->show();
+    ui->balanceLabel->show();
     balanceModel = new QStandardItemModel(1,1);
     QStandardItem *item1 = new QStandardItem(QStringLiteral("test"));
     balanceModel->setItem(0, 0, item1);
 
     mapper = new QDataWidgetMapper();
     mapper->setModel(balanceModel);
-    mapper->addMapping(ui->label,0,"text");
+    mapper->addMapping(ui->balanceLabel,0,"text");
     mapper->toFirst();
 }
 
@@ -44,17 +40,17 @@ void MainWindow::setupIncomeModel(const QString &tableName, const QStringList &h
             incomeModel->setHeaderData(i,Qt::Horizontal,headers[j]);
     }
     incomeModel->setSort(0,Qt::AscendingOrder);
-    ui->tableView->setModel(incomeModel);
-    ui->tableView->setColumnHidden(0, true);
-    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->tableView->resizeColumnsToContents();
-    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    ui->incomeTableView->setModel(incomeModel);
+    ui->incomeTableView->setColumnHidden(0, true);
+    ui->incomeTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->incomeTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->incomeTableView->resizeColumnsToContents();
+    ui->incomeTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->incomeTableView->horizontalHeader()->setStretchLastSection(true);
 
-    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotEditIncomeRecord(QModelIndex)));
-    connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotIncomeMenuRequested(QPoint)));
+    ui->incomeTableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->incomeTableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotEditIncomeRecord(QModelIndex)));
+    connect(ui->incomeTableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotIncomeMenuRequested(QPoint)));
 }
 
 void MainWindow::setupSpendingModel(const QString &tableName, const QStringList &headers){
@@ -64,24 +60,24 @@ void MainWindow::setupSpendingModel(const QString &tableName, const QStringList 
             spendingModel->setHeaderData(i,Qt::Horizontal,headers[j]);
     }
     spendingModel->setSort(0,Qt::AscendingOrder);
-    ui->tableView_2->setModel(spendingModel);
-    ui->tableView_2->setColumnHidden(0, true);
-    ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->tableView_2->resizeColumnsToContents();
-    ui->tableView_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->tableView_2->horizontalHeader()->setStretchLastSection(true);
+    ui->spendingTableView->setModel(spendingModel);
+    ui->spendingTableView->setColumnHidden(0, true);
+    ui->spendingTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->spendingTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->spendingTableView->resizeColumnsToContents();
+    ui->spendingTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->spendingTableView->horizontalHeader()->setStretchLastSection(true);
 
-    ui->tableView_2->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tableView_2, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotEditSpendingRecord(QModelIndex)));
-    connect(ui->tableView_2, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotSpendingMenuRequested(QPoint)));
+    ui->spendingTableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->spendingTableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotEditSpendingRecord(QModelIndex)));
+    connect(ui->spendingTableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotSpendingMenuRequested(QPoint)));
 }
 void MainWindow::slotIncomeMenuRequested(QPoint pos){
     QMenu * menu = new QMenu(this);
     QAction * deleteDevice = new QAction("Удалить", this);
     connect(deleteDevice, SIGNAL(triggered()), this, SLOT(slotRemoveRecordFromIncome()));
     menu->addAction(deleteDevice);
-    menu->popup(ui->tableView->viewport()->mapToGlobal(pos));
+    menu->popup(ui->incomeTableView->viewport()->mapToGlobal(pos));
 }
 
 void MainWindow::slotSpendingMenuRequested(QPoint pos){
@@ -89,11 +85,11 @@ void MainWindow::slotSpendingMenuRequested(QPoint pos){
     QAction * deleteDevice = new QAction("Удалить", this);
     connect(deleteDevice, SIGNAL(triggered()), this, SLOT(slotRemoveRecordFromSpending()));
     menu->addAction(deleteDevice);
-    menu->popup(ui->tableView_2->viewport()->mapToGlobal(pos));
+    menu->popup(ui->spendingTableView->viewport()->mapToGlobal(pos));
 }
 
 void MainWindow::slotRemoveRecordFromIncome(){
-    int row = ui->tableView->selectionModel()->currentIndex().row();
+    int row = ui->incomeTableView->selectionModel()->currentIndex().row();
      if(row >= 0){
         if (QMessageBox::warning(this,
                               "Удаление записи",
@@ -109,13 +105,13 @@ void MainWindow::slotRemoveRecordFromIncome(){
                         "Проверьте все зависимости и повторите попытку");
                     }
                         slotIncomeUpdateModels();
-                        ui->tableView->setCurrentIndex(incomeModel->index(-1, -1));
+                        ui->incomeTableView->setCurrentIndex(incomeModel->index(-1, -1));
          }
      }
 }
 
 void MainWindow::slotRemoveRecordFromSpending(){
-    int row = ui->tableView_2->selectionModel()->currentIndex().row();
+    int row = ui->spendingTableView->selectionModel()->currentIndex().row();
      if(row >= 0){
         if (QMessageBox::warning(this,
                               "Удаление записи",
@@ -131,29 +127,30 @@ void MainWindow::slotRemoveRecordFromSpending(){
                         "Проверьте все зависимости и повторите попытку");
                     }
                         slotSpendingUpdateModels();
-                        ui->tableView_2->setCurrentIndex(spendingModel->index(-1, -1));
+                        ui->spendingTableView->setCurrentIndex(spendingModel->index(-1, -1));
          }
      }
 }
-void MainWindow::on_pushButton_clicked(){
-
+void MainWindow::on_incomePushButton_clicked(){
     AppendIncomeWindow *addAppendIncomeDialog = new AppendIncomeWindow(db);
+    addAppendIncomeDialog->setWindowFlags (addAppendIncomeDialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     addAppendIncomeDialog->setModal(true);
     connect(addAppendIncomeDialog, SIGNAL(signalIncomeUpdate()), this, SLOT(slotIncomeUpdateModels()));
     addAppendIncomeDialog->setWindowTitle("Добавить доходы");
     addAppendIncomeDialog->exec();
 }
 
-void MainWindow::on_pushButton_2_clicked(){
+void MainWindow::on_spendingPushButton_clicked(){
 
     AppendSpendingWindow *addAppendSpendingDialog = new AppendSpendingWindow(db);
+    addAppendSpendingDialog->setWindowFlags (addAppendSpendingDialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     addAppendSpendingDialog->setModal(true);
     connect(addAppendSpendingDialog, SIGNAL(signalSpendingUpdate()), this, SLOT(slotSpendingUpdateModels()));
     addAppendSpendingDialog->setWindowTitle("Добавить траты");
     addAppendSpendingDialog->exec();
 }
 
-void MainWindow::on_pushButton_3_clicked(){
+void MainWindow::on_updatePushButton_clicked(){
     updateDataOnTables();
 }
 
@@ -178,6 +175,7 @@ void MainWindow::updateDataOnTables(){
 
 void MainWindow::slotEditIncomeRecord(QModelIndex index){
      AppendIncomeWindow *addDeviceDialog = new AppendIncomeWindow(db, index.row());
+     addDeviceDialog->setWindowFlags (addDeviceDialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
      connect(addDeviceDialog, SIGNAL(signalIncomeUpdate()), this, SLOT(slotIncomeUpdateModels()));
      addDeviceDialog->setWindowTitle("Редактировать доход");
      addDeviceDialog->exec();
@@ -185,25 +183,29 @@ void MainWindow::slotEditIncomeRecord(QModelIndex index){
 }
 void MainWindow::slotEditSpendingRecord(QModelIndex index){
     AppendSpendingWindow *addDeviceDialog = new AppendSpendingWindow(db, index.row());
+    addDeviceDialog->setWindowFlags (addDeviceDialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     connect(addDeviceDialog, SIGNAL(signalSpendingUpdate()), this, SLOT(slotSpendingUpdateModels()));
     addDeviceDialog->setWindowTitle("Редактировать траты");
     addDeviceDialog->exec();
 }
 
-void MainWindow::on_action_triggered(){
+void MainWindow::on_categoryAction_triggered(){
     CategoryReportWindow *addDeviceDialog = new CategoryReportWindow(db);
+    addDeviceDialog->setWindowFlags (addDeviceDialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     addDeviceDialog->setWindowTitle("Отчет по категориям");
     addDeviceDialog->exec();
 }
 
-void MainWindow::on_action_2_triggered(){
+void MainWindow::on_periodAction_triggered(){
     PeriodReportWindow *addDeviceDialog = new PeriodReportWindow(db);
+    addDeviceDialog->setWindowFlags (addDeviceDialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     addDeviceDialog->setWindowTitle("Отчет за период");
     addDeviceDialog->exec();
 }
 
-void MainWindow::on_action_3_triggered(){
+void MainWindow::on_periodBalanceAction_triggered(){
     BalanceChartWindow *addDeviceDialog = new BalanceChartWindow(db);
+    addDeviceDialog->setWindowFlags (addDeviceDialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     addDeviceDialog->setWindowTitle("Баланс за весь период");
     addDeviceDialog->exec();
 }

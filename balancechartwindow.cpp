@@ -1,6 +1,5 @@
 #include "balancechartwindow.h"
 #include "ui_balancechartwindow.h"
-#include <algorithm>
 
 BalanceChartWindow::BalanceChartWindow(DataBase *db, QWidget *parent) :
     QDialog(parent),
@@ -11,7 +10,6 @@ BalanceChartWindow::BalanceChartWindow(DataBase *db, QWidget *parent) :
     ui->secondTimeDateEdit->setDate(QDate::currentDate());
     DataBaseConnection = db;
     setupChartModel();
-
 }
 
 BalanceChartWindow::~BalanceChartWindow()

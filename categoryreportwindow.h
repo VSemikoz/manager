@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <database.h>
 #include <QStandardItemModel>
+#include <QDebug>
 
 namespace Ui {
 class CategoryReportWindow;
@@ -30,7 +31,6 @@ private:
     void setupSpendingModel();
     void showIncomeData();
     void showSpendingData();
-
 };
 
 #endif // CATEGORYREPORTWINDOW_H

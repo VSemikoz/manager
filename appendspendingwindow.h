@@ -7,6 +7,10 @@
 #include <QStringList>
 #include <QDebug>
 #include <QDataWidgetMapper>
+#include <QDate>
+#include <QString>
+#include <QWidget>
+#include <QSqlDatabase>
 
 namespace Ui {
 class AppendSpendingWindow;
@@ -33,8 +37,8 @@ private:
     QSqlTableModel  *model;
     QDataWidgetMapper *mapper;
 
+    void setupUI();
     void setupModel();
-
 };
 
 #endif // APPENDSPENDINGWINDOW_H
