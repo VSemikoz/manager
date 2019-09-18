@@ -1,0 +1,17 @@
+debug/main.o
+debug/appendincomewindow.o
+debug/appendspendingwindow.o
+debug/balancechartwindow.o
+debug/categoryreportwindow.o
+debug/database.o
+debug/mainwindow.o
+debug/periodreportwindow.o
+debug/qcustomplot.o
+debug/moc_mainwindow.o
+debug/moc_appendincomewindow.o
+debug/moc_appendspendingwindow.o
+debug/moc_balancechartwindow.o
+debug/moc_categoryreportwindow.o
+debug/moc_database.o
+debug/moc_periodreportwindow.o
+debug/moc_qcustomplot.o

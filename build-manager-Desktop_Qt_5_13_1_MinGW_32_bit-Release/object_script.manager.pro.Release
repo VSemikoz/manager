@@ -1,0 +1,17 @@
+release/main.o
+release/appendincomewindow.o
+release/appendspendingwindow.o
+release/balancechartwindow.o
+release/categoryreportwindow.o
+release/database.o
+release/mainwindow.o
+release/periodreportwindow.o
+release/qcustomplot.o
+release/moc_mainwindow.o
+release/moc_appendincomewindow.o
+release/moc_appendspendingwindow.o
+release/moc_balancechartwindow.o
+release/moc_categoryreportwindow.o
+release/moc_database.o
+release/moc_periodreportwindow.o
+release/moc_qcustomplot.o
